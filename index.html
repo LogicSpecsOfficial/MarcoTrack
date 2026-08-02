@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>iOS PWA Application</title>
+  <title>MacroTrack PWA</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -19,7 +19,7 @@
         </svg>
       </div>
       <div class="pwa-banner-text">
-        <p class="pwa-title">Install Application</p>
+        <p class="pwa-title">Add MacroTrack to Home Screen</p>
         <p class="pwa-subtitle">Tap <span class="inline-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M12 2v12m0-12l-4 4m4-4l4 4"/></svg></span> then "Add to Home Screen"</p>
       </div>
       <button class="pwa-close-btn" data-action="close-banner" aria-label="Dismiss banner">
@@ -31,53 +31,160 @@
     </div>
   </div>
 
-  <!-- Main View Container -->
+  <!-- Main Viewport Container -->
   <main class="app-viewport">
     
-    <!-- Header -->
+    <!-- Top Bar Header -->
     <header class="app-header">
-      <h1 class="app-title">Dashboard</h1>
-      <button class="icon-btn" data-action="open-sheet" aria-label="Open details">
+      <div>
+        <h1 class="app-title">MacroTrack</h1>
+        <p class="app-subtitle" id="current-date-display">Today</p>
+      </div>
+      <button class="icon-btn" data-action="open-paste" aria-label="Quick Add Entry">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="12" y1="8" x2="12" y2="12"></line>
-          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
         </svg>
       </button>
     </header>
 
-    <!-- Navigation Views -->
+    <!-- Navigation View 1: Dashboard -->
     <section id="view-home" class="view-section active">
+      
+      <!-- Passive Fasting Hero Card -->
+      <div class="card hero-card">
+        <div class="hero-header">
+          <div class="hero-status">
+            <span class="status-dot active" id="fasting-dot"></span>
+            <span class="hero-label" id="fasting-status-label">Passive Fasting Engine</span>
+          </div>
+          <span class="hero-badge" id="fasting-goal-badge">Target: 16h</span>
+        </div>
+        <div class="hero-timer" id="fasting-timer-display">00h 00m 00s</div>
+        <p class="hero-meta" id="fasting-meta-text">Inferred from last meal timestamp</p>
+      </div>
+
+      <!-- High-Density Macro Progress Bars -->
+      <div class="card macro-card">
+        <h2 class="card-title">Daily Nutrition Targets</h2>
+        
+        <!-- Calories Bar -->
+        <div class="macro-group">
+          <div class="macro-header">
+            <span class="macro-label">Calories</span>
+            <span class="macro-value" id="val-calories">0 / 2,000 kcal</span>
+          </div>
+          <div class="progress-track">
+            <div id="bar-calories" class="progress-fill cal-bar" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <!-- Protein Bar -->
+        <div class="macro-group">
+          <div class="macro-header">
+            <span class="macro-label">Protein</span>
+            <span class="macro-value" id="val-protein">0 / 150 g</span>
+          </div>
+          <div class="progress-track">
+            <div id="bar-protein" class="progress-fill protein-bar" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <!-- Sugar Bar -->
+        <div class="macro-group">
+          <div class="macro-header">
+            <span class="macro-label">Sugar</span>
+            <span class="macro-value" id="val-sugar">0 / 30 g</span>
+          </div>
+          <div class="progress-track">
+            <div id="bar-sugar" class="progress-fill sugar-bar" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <!-- Fat Bar -->
+        <div class="macro-group">
+          <div class="macro-header">
+            <span class="macro-label">Fat</span>
+            <span class="macro-value" id="val-fat">0 / 65 g</span>
+          </div>
+          <div class="progress-track">
+            <div id="bar-fat" class="progress-fill fat-bar" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chronological Daily Log Feed -->
+      <div class="feed-header">
+        <h2 class="feed-title">Today's Meal Feed</h2>
+        <span class="feed-count" id="feed-count">0 items</span>
+      </div>
+      <div id="daily-feed" class="feed-list">
+        <!-- Dynamic Meal Cards Populated Here -->
+      </div>
+
+    </section>
+
+    <!-- Navigation View 2: History -->
+    <section id="view-history" class="view-section">
       <div class="card">
-        <h2>System Status</h2>
-        <p>iOS WebKit standalone PWA architecture initialized with safe area support and floating capsule navigation.</p>
-        <button class="primary-btn" data-action="open-sheet">Trigger Action Sheet</button>
+        <h2 class="card-title">Log History</h2>
+        <p class="card-desc">Chronological aggregate of previous daily targets and meal records.</p>
+      </div>
+      <div id="history-feed" class="feed-list">
+        <!-- History Populated Here -->
       </div>
     </section>
 
-    <section id="view-activity" class="view-section">
-      <div class="card">
-        <h2>Activity Feed</h2>
-        <p>Recent events and dynamic data metrics will populate here.</p>
-      </div>
-    </section>
-
+    <!-- Navigation View 3: Settings -->
     <section id="view-settings" class="view-section">
       <div class="card">
-        <h2>Preferences</h2>
-        <p>System settings automatically match iOS light and dark color schemes.</p>
+        <h2 class="card-title">Nutrition Targets & Profile</h2>
+        <form id="settings-form" class="settings-form">
+          <div class="input-group">
+            <label for="target-calories">Daily Calories Target (kcal)</label>
+            <input type="number" id="target-calories" class="form-input" value="2000" min="500" max="10000">
+          </div>
+          <div class="input-group">
+            <label for="target-protein">Protein Target (g)</label>
+            <input type="number" id="target-protein" class="form-input" value="150" min="0" max="500">
+          </div>
+          <div class="input-group">
+            <label for="target-sugar">Sugar Target (g)</label>
+            <input type="number" id="target-sugar" class="form-input" value="30" min="0" max="300">
+          </div>
+          <div class="input-group">
+            <label for="target-fat">Fat Target (g)</label>
+            <input type="number" id="target-fat" class="form-input" value="65" min="0" max="300">
+          </div>
+          <div class="input-group">
+            <label for="target-fasting">Fasting Target (Hours)</label>
+            <input type="number" id="target-fasting" class="form-input" value="16" min="8" max="48">
+          </div>
+          <button type="submit" class="primary-btn">Save Profile Targets</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title">Device & Database Sync</h2>
+        <p class="card-desc">Personal Device Identifier for Supabase synchronization.</p>
+        <div class="uuid-box">
+          <span class="uuid-label">Fixed Personal UUID:</span>
+          <code id="display-user-uuid" class="uuid-code">--</code>
+        </div>
       </div>
     </section>
 
   </main>
 
-  <!-- Action Sheet Overlay & Modal -->
+  <!-- Action Overlay -->
   <div id="sheet-overlay" class="sheet-overlay"></div>
-  <div id="action-sheet" class="action-sheet">
+
+  <!-- AI Natural Language Paste Bottom Sheet Modal -->
+  <div id="paste-sheet" class="action-sheet">
     <div class="sheet-drag-handle"></div>
     <div class="sheet-header">
-      <h3 class="sheet-title">Quick Actions</h3>
-      <button class="icon-btn-small" data-action="close-sheet" aria-label="Close modal">
+      <h3 class="sheet-title">Log Meal via AI Text</h3>
+      <button class="icon-btn-small" data-action="close-paste" aria-label="Close modal">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -85,12 +192,32 @@
       </button>
     </div>
     <div class="sheet-content">
-      <p>This panel features dynamic swipe-to-dismiss support and native spring momentum layout.</p>
-      <button class="primary-btn" data-action="close-sheet">Done</button>
+      <button id="copy-prompt-btn" class="secondary-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"></path>
+        </svg>
+        Copy System Prompt for LLM
+      </button>
+      
+      <div class="textarea-wrapper">
+        <textarea id="paste-input" class="paste-textarea" placeholder="Paste structured LLM output here...&#10;e.g., food name: Chicken Salad, calories: 450, protein: 40g, sugar: 4g, fat: 12g"></textarea>
+      </div>
+
+      <!-- Instant Token Validation Preview -->
+      <div class="token-preview-grid">
+        <div class="pill-token" id="pill-name">Food: <span>--</span></div>
+        <div class="pill-token" id="pill-cal">Cal: <span>0</span></div>
+        <div class="pill-token" id="pill-pro">Pro: <span>0g</span></div>
+        <div class="pill-token" id="pill-sug">Sug: <span>0g</span></div>
+        <div class="pill-token" id="pill-fat">Fat: <span>0g</span></div>
+      </div>
+
+      <button id="submit-meal-btn" class="primary-btn disabled" disabled>Log Meal Entry</button>
     </div>
   </div>
 
-  <!-- Floating Capsule Bottom Navigation -->
+  <!-- Floating Capsule Bottom Navigation Bar -->
   <nav class="capsule-nav-container">
     <div class="capsule-nav">
       <a href="#" class="nav-item active" data-view="home">
@@ -98,14 +225,24 @@
           <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
           <polyline points="9 22 9 12 15 12 15 22"></polyline>
         </svg>
-        <span class="nav-label">Home</span>
+        <span class="nav-label">Dashboard</span>
       </a>
-      <a href="#" class="nav-item" data-view="activity">
-        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+      
+      <button class="capsule-add-btn" data-action="open-paste" aria-label="Add Meal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
         </svg>
-        <span class="nav-label">Activity</span>
+      </button>
+
+      <a href="#" class="nav-item" data-view="history">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        <span class="nav-label">History</span>
       </a>
+
       <a href="#" class="nav-item" data-view="settings">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="3"></circle>
@@ -116,6 +253,7 @@
     </div>
   </nav>
 
+  <script src="storage.js"></script>
   <script src="app.js"></script>
   <script src="ui.js"></script>
 </body>
